@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+}
+
+enum Platform {
+  YOUTUBE
+  TIKTOK
+  SHORTS
+  REELS
+}
+
+enum Tone {
+  EDUCATIF
+  DIVERTISSANT
+  INSPIRANT
+  STORYTELLING
+  VIRAL
+}
+
+model User {
+  id               String   @id @default(cuid())
+  clerkId          String   @unique
+  email            String   @unique
+  credits          Int      @default(3)
+  plan             Plan     @default(FREE)
+  stripeCustomerId String?
+  scripts          Script[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Script {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform  Platform
+  topic     String
+  tone      Tone
+  duration  Int
+  content   String   @db.Text
+  hooks     String[]
+  createdAt DateTime @default(now())
+}
