@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { Sparkles, History, LayoutDashboard, Zap } from "lucide-react";
+import { Sparkles, History, LayoutDashboard, Zap, CreditCard } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Accueil", icon: LayoutDashboard },
   { href: "/dashboard/generate", label: "Générer", icon: Sparkles },
   { href: "/dashboard/history", label: "Historique", icon: History },
+  { href: "/pricing", label: "Tarifs", icon: CreditCard },
 ];
 
 export function Sidebar() {
