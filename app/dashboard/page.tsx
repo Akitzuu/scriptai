@@ -2,6 +2,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { Sparkles, FileText, Coins } from "lucide-react";
 import Link from "next/link";
+import { PromoCodeInput } from "./promo-code-input";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -78,7 +79,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* CTA */}
-      <div className="bg-gradient-to-r from-violet-900/40 to-violet-600/20 border border-violet-700/50 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-violet-900/40 to-violet-600/20 border border-violet-700/50 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-xl font-bold text-white mb-1">Prêt à créer ton prochain script ?</h2>
           <p className="text-slate-400 text-sm">
@@ -95,6 +96,9 @@ export default async function DashboardPage() {
           Générer un script
         </Link>
       </div>
+
+      {/* Code promo */}
+      <PromoCodeInput />
     </div>
   );
 }

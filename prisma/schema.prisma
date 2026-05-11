@@ -35,6 +35,7 @@ model User {
   credits          Int      @default(3)
   plan             Plan     @default(FREE)
   stripeCustomerId String?
+  promoCodesUsed   String[]
   scripts          Script[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
