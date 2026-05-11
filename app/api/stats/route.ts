@@ -18,21 +18,24 @@ export async function GET(req: NextRequest) {
       prisma.user.count({ where: { plan: "PRO" } }),
     ]);
 
-    // Revenus Stripe du mois en cours
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    const charges = await stripe.charges.list({
-      created: { gte: Math.floor(startOfMonth.getTime() / 1000) },
-      limit: 100,
-    });
-
-    const mrr = charges.data
-      .filter((c) => c.paid && !c.refunded)
-      .reduce((acc, c) => acc + c.amount, 0) / 100; // en euros
-
     // MRR théorique (abonnements actifs)
     const theoreticalMrr = starterUsers * 9 + proUsers * 29;
+
+    // Revenus Stripe du mois en cours
+    let mrr = 0;
+    try {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const charges = await stripe.charges.list({
+        created: { gte: Math.floor(startOfMonth.getTime() / 1000) },
+        limit: 100,
+      });
+      mrr = charges.data
+        .filter((c: { paid: boolean; refunded: boolean; amount: number }) => c.paid && !c.refunded)
+        .reduce((acc: number, c: { amount: number }) => acc + c.amount, 0) / 100;
+    } catch {
+      mrr = theoreticalMrr; // fallback
+    }
 
     return NextResponse.json({
       totalUsers,
